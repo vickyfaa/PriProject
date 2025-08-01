@@ -1,4 +1,8 @@
 /* General Styles */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     margin: 0;
@@ -18,14 +22,31 @@ body {
 header {
     background: #222;
     color: #fff;
-    padding: 0;
+    padding: 10px 0;
+    width: 100%;
+    transition: box-shadow 0.3s ease;
+    z-index: 1000;
+}
+
+/* Class added by JS for sticky nav */
+.sticky-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #2c2c2c;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+    padding: 0; /* Removed padding from nav to control header padding */
+}
+
+.logo h2 a {
+    color: #fff;
+    text-decoration: none;
 }
 
 nav ul {
@@ -46,6 +67,12 @@ nav a {
 nav a:hover {
     color: #ff9800;
 }
+
+/* Add padding to main content to avoid overlap from sticky nav */
+main {
+    padding-top: 80px; /* Adjust this based on your header's height */
+}
+
 
 /* Hero Section */
 .hero {
@@ -74,6 +101,7 @@ nav a:hover {
     border-radius: 30px;
     cursor: pointer;
     font-weight: bold;
+    text-decoration: none;
     transition: background 0.2s, color 0.2s;
 }
 
@@ -82,66 +110,54 @@ nav a:hover {
     color: #fff;
 }
 
-/* Introduction Section */
+/* Sections General Styling */
+.introduction, .about, .services, .projects, .contact {
+    padding: 32px 0;
+    margin: 40px 0;
+}
+
 .introduction {
     background: #fff3e0;
     border-left: 6px solid #ff9800;
-    margin: 40px 0;
-    padding: 32px 0;
 }
 
-.introduction h2 {
-    color: #ff9800;
-    margin-bottom: 12px;
-}
-
-.introduction p {
-    font-size: 1.1rem;
-    color: #444;
-}
-
-/* About Section */
-.about {
+.about, .projects, .contact {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    margin: 40px 0;
-    padding: 32px 0;
 }
 
-.about h2 {
-    color: #ff9800;
-    margin-bottom: 12px;
-}
-
-/* Services Section */
 .services {
     background: #f5f5f5;
-    margin: 40px 0;
-    padding: 32px 0;
 }
 
-.services h2 {
+h2 {
     color: #ff9800;
     margin-bottom: 24px;
+    text-align: center;
+    font-size: 2rem;
 }
 
-.services-grid {
-    display: flex;
+/* Services & Projects Grids */
+.services-grid, .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
-    flex-wrap: wrap;
     justify-content: center;
 }
 
-.service-card {
+.service-card, .project-card {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     padding: 24px 20px;
-    flex: 1 1 220px;
-    min-width: 220px;
-    max-width: 320px;
     text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover, .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
 }
 
 .service-card h3 {
@@ -149,25 +165,48 @@ nav a:hover {
     margin-bottom: 10px;
 }
 
-/* Contact Section */
-.contact {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    margin: 40px 0;
-    padding: 32px 0;
-}
-
-.contact h2 {
-    color: #ff9800;
+/* Projects Section Specifics */
+.project-image-placeholder {
+    width: 100%;
+    height: 180px;
+    background-color: #e0e0e0;
+    border-radius: 6px;
     margin-bottom: 16px;
 }
 
+.project-card h3 {
+    color: #ff5722;
+    margin-bottom: 8px;
+}
+
+.project-card p {
+    margin-bottom: 16px;
+    color: #555;
+}
+
+.project-button {
+    background: #ff9800;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.project-button:hover {
+    background: #ff5722;
+}
+
+
+/* Contact Section */
 .contact-form {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    max-width: 400px;
+    max-width: 450px;
     margin: 0 auto;
 }
 
@@ -186,6 +225,7 @@ nav a:hover {
     font-size: 1rem;
     background: #fafafa;
     transition: border 0.2s;
+    box-sizing: border-box;
 }
 
 .form-group input:focus,
@@ -210,6 +250,31 @@ nav a:hover {
     background: #ff5722;
 }
 
+/* Success Message Styles */
+.success-message {
+    color: #28a745;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 12px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Fade-in Animation on Scroll */
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
 /* Footer */
 footer {
     background: #222;
@@ -221,41 +286,20 @@ footer {
     letter-spacing: 0.5px;
 }
 
-/* Success Message Styles */
-.success-message {
-    color: #28a745;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    border-radius: 4px;
-    padding: 12px;
-    margin-top: 12px;
-    text-align: center;
-    font-weight: 500;
-    animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Responsive Design */
 @media (max-width: 800px) {
-    .services-grid {
-        flex-direction: column;
-        gap: 16px;
-    }
     .container {
-        width: 98%;
+        width: 95%;
         padding: 20px 0;
     }
     .hero {
         padding: 50px 0 40px 0;
+    }
+    nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+    main {
+        padding-top: 150px; /* Adjust for taller mobile nav */
     }
 }
